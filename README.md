@@ -48,15 +48,15 @@ You can install Postman via this website: https://www.postman.com/downloads/
     (You might want to use `cargo check` if you only need to verify your work without running the app.)
 
 ## Mandatory Checklists (Publisher)
--   [ ] Clone https://gitlab.com/ichlaffterlalu/bambangshop to a new repository.
+-   [x] Clone https://gitlab.com/ichlaffterlalu/bambangshop to a new repository.
 -   **STAGE 1: Implement models and repositories**
-    -   [ ] Commit: `Create Subscriber model struct.`
-    -   [ ] Commit: `Create Notification model struct.`
-    -   [ ] Commit: `Create Subscriber database and Subscriber repository struct skeleton.`
-    -   [ ] Commit: `Implement add function in Subscriber repository.`
-    -   [ ] Commit: `Implement list_all function in Subscriber repository.`
-    -   [ ] Commit: `Implement delete function in Subscriber repository.`
-    -   [ ] Write answers of your learning module's "Reflection Publisher-1" questions in this README.
+    -   [x] Commit: `Create Subscriber model struct.`
+    -   [x] Commit: `Create Notification model struct.`
+    -   [x] Commit: `Create Subscriber database and Subscriber repository struct skeleton.`
+    -   [x] Commit: `Implement add function in Subscriber repository.`
+    -   [x] Commit: `Implement list_all function in Subscriber repository.`
+    -   [x] Commit: `Implement delete function in Subscriber repository.`
+    -   [x] Write answers of your learning module's "Reflection Publisher-1" questions in this README.
 -   **STAGE 2: Implement services and controllers**
     -   [ ] Commit: `Create Notification service struct skeleton.`
     -   [ ] Commit: `Implement subscribe function in Notification service.`
@@ -77,6 +77,18 @@ This is the place for you to write reflections:
 ### Mandatory (Publisher) Reflections
 
 #### Reflection Publisher-1
+> In the Observer pattern diagram explained by the Head First Design Pattern book, Subscriber is defined as an interface. Explain based on your understanding of Observer design patterns, do we still need an interface (or trait in Rust) in this BambangShop case, or a single Model struct is enough?
+
+Saat ini, satu struct model sudah mencukupi karena BambangShop hanya memiliki satu tipe pelanggan dengan perilaku yang seragam. Oleh karena itu, penggunaan trait untuk mendukung polimorfisme tidak diperlukan. Namun, jika terdapat berbagai jenis pelanggan dengan perilaku berbeda, penggunaan trait dapat memberikan antarmuka bersama serta fleksibilitas dalam implementasi.
+
+> id in Program and url in Subscriber is intended to be unique. Explain based on your understanding, is using Vec (list) sufficient or using DashMap (map/dictionary) like we currently use is necessary for this case?
+
+Menggunakan DashMap lebih tepat dibanding Vec dalam kasus ini. Pertama, pengecekan keunikan id atau url pada Vec memerlukan  O(n), sedangkan DashMap menggunakan hashing untuk akses langsung sehingga kompeksitasnya O(1), yang jauh lebih efisien, terutama saat data bertambah besar. Kedua, DashMap secara langsung mencegah duplikasi data karena menggunakan url sebagai key sedangkan Vec tidak memiliki mekanisme otomatis untuk mencegah entri duplikat.
+
+> When programming using Rust, we are enforced by rigorous compiler constraints to make a thread-safe program. In the case of the List of Subscribers (SUBSCRIBERS) static variable, we used the DashMap external library for thread safe HashMap. Explain based on your understanding of design patterns, do we still need DashMap or we can implement Singleton pattern instead?
+
+
+DashMap sangat dioptimalkan untuk operasi yang bersifat konkuren, sehingga menjadi pilihan ideal untuk mengelola variabel thread-safe seperti . Meski pola desain Singleton dapat memastikan hanya ada satu instance global, pola tersebut tidak secara inheren memberikan thread-safety tanpa mekanisme sinkronisasi tambahan yang dapat menyebabkan bottleneck kinerja. Dalam kasus ini, DashMap menyederhanakan implementasi dengan menggabungkan mekanisme locking yang efisien dan kinerja yang unggul dalam kondisi konkuren tinggi, sehingga tidak diperlukan setup Singleton manual yang thread-safe. Jadi, DashMap adalah pilihan yang aman dan efisien.
 
 #### Reflection Publisher-2
 
